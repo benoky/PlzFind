@@ -14,7 +14,7 @@
         android:layout_weight="1" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/bt_send"
         android:layout_width="match_parent"
         android:layout_height="25dp"
         android:layout_weight="1"

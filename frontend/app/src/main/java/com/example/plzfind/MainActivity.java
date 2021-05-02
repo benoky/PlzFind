@@ -6,16 +6,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+
 import android.provider.MediaStore;
+
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
-
 import android.Manifest;
+import android.widget.Toast;
+
 import androidx.core.app.ActivityCompat;
 import java.io.IOException;
 
@@ -23,7 +27,11 @@ public class MainActivity extends AppCompatActivity {
     ImageView imgV;
     Button Bt1;
     Button bt_gallery;
+    Button bt_send;
     Uri imgUri;
+
+    ImgRequest imgRequest=null; //이미지 파일 업로드하기 위한 객체
+    Bitmap bitmap=null; //이미지 선택 및 촬영 후 이미지를 비트맵으로 저장하기 위한 객체
 
     static final int TAKE_CAMERA=1;
     static final int PICK_FROM_ALBUM = 2;
@@ -33,20 +41,25 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_main);
+
         imgV = findViewById(R.id.ImgView1);
         Bt1 =findViewById(R.id.Bt_camara);
         bt_gallery = findViewById(R.id.Bt_gallery);
+        bt_send=findViewById(R.id.bt_send);
+
+        imgRequest=new ImgRequest(); //이미지 파일 업로드하기 위한 객체 생성
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){ //권한설정 ( 마시멜로우 이상 Version)
             if(checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
                     && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-                    && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED ){
+                    && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+                    ){
             }else
             {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA
-                        , Manifest.permission.READ_EXTERNAL_STORAGE
-                        , Manifest.permission.WRITE_EXTERNAL_STORAGE}
-                        , 1);
+                ActivityCompat.requestPermissions(this, new String[]{
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
             }
         }
 
@@ -68,31 +81,43 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, PICK_FROM_ALBUM);
             }
         });
-    }
+        //화면의 '전송'버튼 선택 시 동작
+        bt_send.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                //bitmap에 이미지가 들어 있을 경우에만 전송관련 기능 호출출
+               if(bitmap!=null){
+                    imgRequest.connectServer(bitmap);
+                }else if(bitmap==null){
+                    Toast.makeText(getApplicationContext(),"이미지를 선택 또는 촬영해 주세요.",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }//onCreate()
 
-
-    //3번 카메라로 찍은 사진 결과 처리
+    //이미지 비트맵 처리
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        //카메라로 사진 촬영 시
         if(requestCode == TAKE_CAMERA){
             if(resultCode==RESULT_OK){
                 if(data!=null){
-                    Bitmap b= (Bitmap)data.getExtras().get("data");
-                    imgV.setImageBitmap(b);
+                    bitmap= (Bitmap)data.getExtras().get("data");
+                    imgV.setImageBitmap(bitmap);
                 }
             }
         }
+        //앨범 에서 선택 시
         else if(requestCode == PICK_FROM_ALBUM){
             if(resultCode==RESULT_OK){
                 imgUri = data.getData();
                 try {
-                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imgUri);
+                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imgUri);
                         imgV.setImageBitmap(bitmap);
                 } catch(IOException e){
 
                 }
             }
         }
-    }
+    }//onActivityResult()
 }
