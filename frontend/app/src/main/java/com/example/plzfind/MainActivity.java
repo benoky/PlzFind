@@ -89,9 +89,9 @@ public class MainActivity extends AppCompatActivity {
                    imgRequest.connectServer(bitmap);
                    String pro_name = "GPro"; // 제품명 임시
                    get_bitmap = bitmap; // 여기에 받아온 비트맵 이미지 넣으면 될듯 _동건(임시)
-
                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                   get_bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream);
+
+                   get_bitmap.compress(Bitmap.CompressFormat.JPEG,70,stream);
                    byte[] byteArrayBitmap = stream.toByteArray();
 
                    Intent intent = new Intent(MainActivity.this, get_Img_Data.class);

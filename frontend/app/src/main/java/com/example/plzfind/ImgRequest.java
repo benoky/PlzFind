@@ -15,7 +15,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ImgRequest {
-    String postUrl="http://112.156.72.74:5000/"; //서버의 IP
+    String postUrl="http://180.228.125.111:5000/"; //서버의 IP
 
     protected void connectServer(Bitmap bitmap){
         ByteArrayOutputStream stream = new ByteArrayOutputStream(); //압축된 bitmap의 byte배열을 담을 스트림
