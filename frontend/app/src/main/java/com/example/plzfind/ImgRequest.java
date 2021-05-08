@@ -20,7 +20,7 @@ public class ImgRequest {
     protected void connectServer(Bitmap bitmap){
         ByteArrayOutputStream stream = new ByteArrayOutputStream(); //압축된 bitmap의 byte배열을 담을 스트림
 
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream); //이미지의 bitmap을 압축
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream); //이미지의 bitmap 압축
         byte[] byteArray=stream.toByteArray();
 
         RequestBody postBodyImage = new MultipartBody.Builder()
