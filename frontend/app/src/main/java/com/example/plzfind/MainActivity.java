@@ -97,8 +97,8 @@ public class MainActivity extends AppCompatActivity {
                    Intent intent = new Intent(MainActivity.this, get_Img_Data.class);
                    intent.putExtra("pro_name",pro_name);
                    intent.putExtra("pro_image",byteArrayBitmap);
-
                    startActivity(intent);
+
                 }else if(bitmap==null){
                     Toast.makeText(getApplicationContext(),"이미지를 선택 또는 촬영해 주세요.",Toast.LENGTH_SHORT).show();
                 }
