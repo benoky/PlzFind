@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     Button bt_gallery;
     Button bt_send;
     Uri imgUri;
+    int img_size;
 
     ImgRequest imgRequest=null; //이미지 파일 업로드하기 위한 객체
     Bitmap bitmap=null; //이미지 선택 및 촬영 후 이미지를 비트맵으로 저장하기 위한 객체
@@ -91,7 +92,22 @@ public class MainActivity extends AppCompatActivity {
                    get_bitmap = bitmap; // 여기에 받아온 비트맵 이미지 넣으면 될듯 _동건(임시)
                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
-                   get_bitmap.compress(Bitmap.CompressFormat.JPEG,70,stream);
+                   img_size = get_bitmap.getByteCount();
+                   if(img_size >= 5242880){
+                       get_bitmap.compress(Bitmap.CompressFormat.JPEG,10,stream);
+                   }
+                   else if(img_size >= 4194304 || img_size <= 5242879){
+                       get_bitmap.compress(Bitmap.CompressFormat.JPEG,50,stream);
+                   }
+                   else if(img_size >= 3145728 || img_size <= 4194303){
+                       get_bitmap.compress(Bitmap.CompressFormat.JPEG,60,stream);
+                   }
+                   else if(img_size >= 0 || img_size <= 3145727){
+                       get_bitmap.compress(Bitmap.CompressFormat.JPEG,70,stream);
+                   }
+                   else{
+                       Toast.makeText(getApplicationContext(),"이미지선택 오류.",Toast.LENGTH_SHORT).show();
+                   }
                    byte[] byteArrayBitmap = stream.toByteArray();
 
                    Intent intent = new Intent(MainActivity.this, get_Img_Data.class);
