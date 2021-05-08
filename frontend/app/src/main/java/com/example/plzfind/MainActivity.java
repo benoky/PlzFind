@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
@@ -86,13 +87,17 @@ public class MainActivity extends AppCompatActivity {
                 //bitmap에 이미지가 들어 있을 경우에만 전송관련 기능 호출출
                if(bitmap!=null){
                    imgRequest.connectServer(bitmap);
-                   String pro_name = "G302"; // 제품명 임시
-                   get_bitmap = null; // 여기에 받아온 비트맵 이미지 넣으면 될듯 _동건
+                   String pro_name = "GPro"; // 제품명 임시
+                   get_bitmap = bitmap; // 여기에 받아온 비트맵 이미지 넣으면 될듯 _동건(임시)
 
+                   ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                   get_bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream);
+                   byte[] byteArrayBitmap = stream.toByteArray();
 
                    Intent intent = new Intent(MainActivity.this, get_Img_Data.class);
                    intent.putExtra("pro_name",pro_name);
-                   
+                   intent.putExtra("pro_image",byteArrayBitmap);
+
                    startActivity(intent);
                 }else if(bitmap==null){
                     Toast.makeText(getApplicationContext(),"이미지를 선택 또는 촬영해 주세요.",Toast.LENGTH_SHORT).show();

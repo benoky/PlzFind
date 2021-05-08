@@ -8,23 +8,45 @@ import android.widget.Button;
 
 public class Connect_Market extends MainActivity {
 
-    Button naver_btn;
+    Button interpark_btn;
+    Button auction_btn;
+    Button wemakeprice_btn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.connect_market);
 
+        Intent intent = getIntent();
+        String getproname = intent.getExtras().getString("pro_name");   // 제품명 받는 부분
 
-        String g302 = "G302";   // 제품명 받는 부분
-
-        naver_btn = (Button)findViewById(R.id.Naver_Btn);
-        naver_btn.setOnClickListener(new View.OnClickListener() {
+        interpark_btn = (Button)findViewById(R.id.Interpark_Btn);
+        interpark_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://m.shop.interpark.com/search_all/?q="+g302+"&type=all"));
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://m.shop.interpark.com/search_all/?q="+getproname+"&type=all"));
                 startActivity(i);
             }
         });
+
+        auction_btn = (Button)findViewById(R.id.Auction_Btn);
+        auction_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://browse.auction.co.kr/m/search?keyword="+getproname));
+                startActivity(i);
+            }
+        });
+
+        wemakeprice_btn = (Button)findViewById(R.id.Wemakeprice_Btn);
+        wemakeprice_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://msearch.wemakeprice.com/search?keyword="+getproname+"&_service=5"));
+                startActivity(i);
+            }
+        });
+
+
     }
 
 
