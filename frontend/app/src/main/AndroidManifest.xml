@@ -9,6 +9,7 @@
     <uses-feature android:name="android.hardware.camera"
         android:required="true" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
 
     <application
@@ -20,8 +21,10 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
 
-
+        <activity android:name=".get_Img_Data"></activity>
+        <activity android:name=".Connect_Market"></activity>
         <activity android:name=".MainActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
