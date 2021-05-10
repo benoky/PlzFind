@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -84,14 +85,16 @@ public class MainActivity extends AppCompatActivity {
         });
         //화면의 '전송'버튼 선택 시 동작
         bt_send.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
+            public void onClick(View v) {
                 //bitmap에 이미지가 들어 있을 경우에만 전송관련 기능 호출출
                if(bitmap!=null){
                    imgRequest.connectServer(bitmap);
-                   String pro_name = "GPro"; // 제품명 임시
+                   String pro_name=imgRequest.getReturn(); //서버로부터 제품명 문자열을 받아와 저장
+
                    get_bitmap = bitmap; // 여기에 받아온 비트맵 이미지 넣으면 될듯 _동건(임시)
                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
+                   //이미지 파일의 용량에 따른 이미지 압축 조건문
                    img_size = get_bitmap.getByteCount();
                    if(img_size >= 5242880){
                        get_bitmap.compress(Bitmap.CompressFormat.JPEG,10,stream);
@@ -115,14 +118,33 @@ public class MainActivity extends AppCompatActivity {
                    intent.putExtra("pro_image",byteArrayBitmap);
                    startActivity(intent);
 
-                }else if(bitmap==null){
-                    Toast.makeText(getApplicationContext(),"이미지를 선택 또는 촬영해 주세요.",Toast.LENGTH_SHORT).show();
-                }
+               }else if(bitmap==null) {
+                   Toast.makeText(getApplicationContext(), "이미지를 선택 또는 촬영해 주세요.", Toast.LENGTH_SHORT).show();
+               }
+               if (bitmap != null) {
+                   imgRequest.connectServer(bitmap);
+
+                   String pro_name = "GPro"; // 제품명 임시
+                   get_bitmap = bitmap; // 여기에 받아온 비트맵 이미지 넣으면 될듯 _동건(임시)
+                   ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+
+                   get_bitmap.compress(Bitmap.CompressFormat.JPEG, 60, stream);
+                   byte[] byteArrayBitmap = stream.toByteArray();
+
+                   Intent intent = new Intent(MainActivity.this, get_Img_Data.class);
+                   intent.putExtra("pro_name", pro_name);
+                   intent.putExtra("pro_image", byteArrayBitmap);
+                   startActivity(intent);
+
+               } else if (bitmap == null) {
+                   Toast.makeText(getApplicationContext(), "이미지를 선택 또는 촬영해 주세요.", Toast.LENGTH_SHORT).show();
+               }
             }
         });
     }//onCreate()
 
-    //이미지 비트맵 처리
+    //사진 촬영 또는 이미지 선택하여 이미지 비트맵 처리
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -140,12 +162,12 @@ public class MainActivity extends AppCompatActivity {
             if(resultCode==RESULT_OK){
                 imgUri = data.getData();
                 try {
-                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imgUri);
-                        imgV.setImageBitmap(bitmap);
-                } catch(IOException e){
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imgUri);
+                    imgV.setImageBitmap(bitmap);
+                } catch(IOException e) {
 
                 }
             }
         }
     }//onActivityResult()
-}
+}//MainActivity class
