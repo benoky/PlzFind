@@ -28,12 +28,8 @@ public class MainActivity extends AppCompatActivity {
     Button bt_gallery;
     Button bt_send;
     Uri imgUri;
-    int img_size;
 
-    ImgRequest imgRequest=null; //이미지 파일 업로드하기 위한 객체
-    Bitmap bitmap=null; //이미지 선택 및 촬영 후 이미지를 비트맵으로 저장하기 위한 객체
-
-    Bitmap get_bitmap = null; // 받아온 이미지 객체
+    Bitmap sendBitmap=null; //이미지 선택 및 촬영 후 이미지를 비트맵으로 저장하기 위한 객체
 
     static final int TAKE_CAMERA=1;
     static final int PICK_FROM_ALBUM = 2;
@@ -48,8 +44,6 @@ public class MainActivity extends AppCompatActivity {
         Bt1 =findViewById(R.id.Bt_camara);
         bt_gallery = findViewById(R.id.Bt_gallery);
         bt_send=findViewById(R.id.bt_send);
-
-        imgRequest=new ImgRequest(); //이미지 파일 업로드하기 위한 객체 생성
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){ //권한설정 ( 마시멜로우 이상 Version)
             if(checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
@@ -87,57 +81,12 @@ public class MainActivity extends AppCompatActivity {
         bt_send.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                 //bitmap에 이미지가 들어 있을 경우에만 전송관련 기능 호출출
-               if(bitmap!=null){
-                   imgRequest.connectServer(bitmap);
-                   String pro_name=imgRequest.getReturn(); //서버로부터 제품명 문자열을 받아와 저장
-
-                   get_bitmap = bitmap; // 여기에 받아온 비트맵 이미지 넣으면 될듯 _동건(임시)
-                   ByteArrayOutputStream stream = new ByteArrayOutputStream();
-
-                   //이미지 파일의 용량에 따른 이미지 압축 조건문
-                   img_size = get_bitmap.getByteCount();
-                   if(img_size >= 5242880){
-                       get_bitmap.compress(Bitmap.CompressFormat.JPEG,10,stream);
-                   }
-                   else if(img_size >= 4194304 || img_size <= 5242879){
-                       get_bitmap.compress(Bitmap.CompressFormat.JPEG,50,stream);
-                   }
-                   else if(img_size >= 3145728 || img_size <= 4194303){
-                       get_bitmap.compress(Bitmap.CompressFormat.JPEG,60,stream);
-                   }
-                   else if(img_size >= 0 || img_size <= 3145727){
-                       get_bitmap.compress(Bitmap.CompressFormat.JPEG,70,stream);
-                   }
-                   else{
-                       Toast.makeText(getApplicationContext(),"이미지선택 오류.",Toast.LENGTH_SHORT).show();
-                   }
-                   byte[] byteArrayBitmap = stream.toByteArray();
+               if(sendBitmap!=null){
+                   ImgRequest.connectServer(sendBitmap); //비트맵 이미지를 전송하기위한 메소드 호출
 
                    Intent intent = new Intent(MainActivity.this, get_Img_Data.class);
-                   intent.putExtra("pro_name",pro_name);
-                   intent.putExtra("pro_image",byteArrayBitmap);
                    startActivity(intent);
-
-               }else if(bitmap==null) {
-                   Toast.makeText(getApplicationContext(), "이미지를 선택 또는 촬영해 주세요.", Toast.LENGTH_SHORT).show();
-               }
-               if (bitmap != null) {
-                   imgRequest.connectServer(bitmap);
-
-                   String pro_name = "GPro"; // 제품명 임시
-                   get_bitmap = bitmap; // 여기에 받아온 비트맵 이미지 넣으면 될듯 _동건(임시)
-                   ByteArrayOutputStream stream = new ByteArrayOutputStream();
-
-
-                   get_bitmap.compress(Bitmap.CompressFormat.JPEG, 60, stream);
-                   byte[] byteArrayBitmap = stream.toByteArray();
-
-                   Intent intent = new Intent(MainActivity.this, get_Img_Data.class);
-                   intent.putExtra("pro_name", pro_name);
-                   intent.putExtra("pro_image", byteArrayBitmap);
-                   startActivity(intent);
-
-               } else if (bitmap == null) {
+               }else if(sendBitmap==null) {
                    Toast.makeText(getApplicationContext(), "이미지를 선택 또는 촬영해 주세요.", Toast.LENGTH_SHORT).show();
                }
             }
@@ -152,8 +101,8 @@ public class MainActivity extends AppCompatActivity {
         if(requestCode == TAKE_CAMERA){
             if(resultCode==RESULT_OK){
                 if(data!=null){
-                    bitmap= (Bitmap)data.getExtras().get("data");
-                    imgV.setImageBitmap(bitmap);
+                    sendBitmap= (Bitmap)data.getExtras().get("data");
+                    imgV.setImageBitmap(sendBitmap);
                 }
             }
         }
@@ -162,8 +111,8 @@ public class MainActivity extends AppCompatActivity {
             if(resultCode==RESULT_OK){
                 imgUri = data.getData();
                 try {
-                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imgUri);
-                    imgV.setImageBitmap(bitmap);
+                    sendBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imgUri);
+                    imgV.setImageBitmap(sendBitmap);
                 } catch(IOException e) {
 
                 }

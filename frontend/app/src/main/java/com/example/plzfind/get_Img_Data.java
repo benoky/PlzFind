@@ -13,25 +13,19 @@ public class get_Img_Data extends MainActivity{
     Button go_connect_market;
     ImageView learning_img;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.get_imgdata);
 
-
-
-        Intent intent = getIntent();
-
-        String getproname = intent.getExtras().getString("pro_name");
-        byte[] arr = getIntent().getByteArrayExtra("pro_image");
-        Bitmap getproimg = BitmapFactory.decodeByteArray(arr,0,arr.length);
-
         learning_img = (ImageView)findViewById(R.id.GetData_Img);
-        learning_img.setImageBitmap(getproimg);
 
 
-        go_connect_market = (Button)findViewById(R.id.Go_Connect_Market);
+        learning_img.setImageBitmap(ImgRequest.getBitmap()); //서버에서 받은 이미지를 화면에 출력
+        //ImgRequest.returnStr배열에서 상품 이름들 가져올 수 있음
+
+
+        /*go_connect_market = (Button)findViewById(R.id.Go_Connect_Market);
         go_connect_market.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -39,7 +33,6 @@ public class get_Img_Data extends MainActivity{
                 i.putExtra("pro_name", getproname);
                 startActivity(i);
             }
-        });
+        });*/
     }
-
 }
