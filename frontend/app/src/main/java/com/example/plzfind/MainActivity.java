@@ -88,7 +88,8 @@ public class MainActivity extends AppCompatActivity {
                 //bitmap에 이미지가 들어 있을 경우에만 전송관련 기능 호출출
                if(bitmap!=null){
                    imgRequest.connectServer(bitmap);
-                   String pro_name = "GPro"; // 제품명 임시
+                   String pro_name = "G304"; // 제품명 임시
+
                    get_bitmap = bitmap; // 여기에 받아온 비트맵 이미지 넣으면 될듯 _동건(임시)
                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
