@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //bitmap에 이미지가 들어 있을 경우에만 전송관련 기능 호출출
                if(sendBitmap!=null){
-                   Bitmap requestBitmap = resizeBitmapImage(sendBitmap, 480);
+                   Bitmap requestBitmap = sendBitmap;
                    ImgRequest.connectServer(requestBitmap); //비트맵 이미지를 전송하기위한 메소드 호출
                    Intent intent = new Intent(MainActivity.this, get_Img_Data.class);
                    startActivity(intent);
