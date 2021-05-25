@@ -19,9 +19,15 @@ public class get_Img_Data extends MainActivity{
         setContentView(R.layout.get_imgdata);
 
         learning_img = (ImageView)findViewById(R.id.GetData_Img);
+        Bitmap bitmap=ImgRequest.getBitmap();
+        while(true){
+            if(bitmap!=null){
+                break;
+            }
+            bitmap=ImgRequest.getBitmap();
+        }
 
-
-        learning_img.setImageBitmap(ImgRequest.getBitmap()); //서버에서 받은 이미지를 화면에 출력
+        learning_img.setImageBitmap(bitmap); //서버에서 받은 이미지를 화면에 출력
         //ImgRequest.returnStr배열에서 상품 이름들 가져올 수 있음
 
 
