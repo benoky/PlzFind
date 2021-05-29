@@ -21,26 +21,18 @@ public class get_Img_Data extends MainActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.get_imgdata);
 
-        pro_name = ImgRequest.retrunStr;
-        while(true){
-            if(pro_name!=null){
-                pro_name = ImgRequest.retrunStr;
-                break;
-            }
-        }
-
         learning_img = (ImageView)findViewById(R.id.GetData_Img);
         Bitmap bitmap=ImgRequest.getBitmap();
         while(true){
             if(bitmap!=null){
-                bitmap=ImgRequest.getBitmap();
                 break;
             }
+            bitmap=ImgRequest.getBitmap();
         }
         learning_img.setImageBitmap(bitmap); //서버에서 받은 이미지를 화면에 출력
 
 
-
+        pro_name = ImgRequest.retrunStr;
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, pro_name);
         ListView pro_list = (ListView)findViewById(R.id.ProList);
         pro_list.setAdapter(adapter);
@@ -50,17 +42,10 @@ public class get_Img_Data extends MainActivity{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String strText = (String)parent.getItemAtPosition(position);
 
-
                 Intent i = new Intent(get_Img_Data.this, Connect_Market.class);
                 i.putExtra("pro_name", strText);
                 startActivity(i);
-
-
-
             }
         });
-
-
-
     }
 }

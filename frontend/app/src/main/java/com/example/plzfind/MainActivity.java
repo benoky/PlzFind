@@ -13,7 +13,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -76,9 +75,6 @@ public class MainActivity extends AppCompatActivity {
         Bt1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                //2번 화면 전환
-                //startActivityForResult(intent,TAKE_CAMERA);
                 dispatchTakePictureIntent();
             }
         });
@@ -103,7 +99,6 @@ public class MainActivity extends AppCompatActivity {
                            Intent intent = new Intent(MainActivity.this, get_Img_Data.class);
                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                            startActivity(intent);
-                           Log.e("태그","되냐?");
                            break;
                        }
                    }
