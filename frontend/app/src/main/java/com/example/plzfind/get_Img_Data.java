@@ -48,8 +48,6 @@ public class get_Img_Data extends MainActivity{
                 String strText = (String)parent.getItemAtPosition(position);
 
                 Intent i = new Intent(get_Img_Data.this, Connect_Market.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 i.putExtra("pro_name", strText);
                 startActivity(i);
             }

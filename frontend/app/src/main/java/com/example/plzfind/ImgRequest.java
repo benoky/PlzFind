@@ -29,10 +29,11 @@ public class ImgRequest {
 
     private static Bitmap returnImgBitmap=null; //서버로부터 반환 받은 이미지를 저장할 비트맵 객체
     public static String[] retrunStr=null; //서버에서 이미지에서 판별한 상품들의 문자열을 받아 저장하는 배열
-
+    public static Bitmap tmBitmap1 = null;
+    public static Bitmap tmBitmap = null;
     protected static void connectServer(Bitmap bitmap){
+        tmBitmap1 = bitmap;
         ByteArrayOutputStream stream = new ByteArrayOutputStream(); //압축된 bitmap의 byte배열을 담을 스트림
-
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream); //이미지의 bitmap 압축
         byte[] byteArray=stream.toByteArray();
 
@@ -82,6 +83,7 @@ public class ImgRequest {
                                     retrunStr[i]=jsonObject.getString("productName"+i);
                                     Log.d("test_상품이름"+i,retrunStr[i]);
                                 }
+                                tmBitmap = tmBitmap1;
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -95,6 +97,7 @@ public class ImgRequest {
                     });
                 }
             }
+
             //이미지 전송 실패 시 동작
             @Override
             public void onFailure(Call call, IOException e) {

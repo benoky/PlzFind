@@ -94,15 +94,23 @@ public class MainActivity extends AppCompatActivity {
                    Bitmap requestBitmap = sendBitmap;
                    ImgRequest.connectServer(requestBitmap); //비트맵 이미지를 전송하기위한 메소드 호출
                    try {
-                       Thread.sleep(3500);
+                       Thread.sleep(3000);
                    } catch (InterruptedException e) {
                        e.printStackTrace();
                    }
-                   Intent intent = new Intent(MainActivity.this, get_Img_Data.class);
-                   intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                   intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                   intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                   startActivity(intent);
+                   while(true){
+                       if(sendBitmap == ImgRequest.tmBitmap){
+                           if(ImgRequest.retrunStr != null) {
+                               Intent intent = new Intent(MainActivity.this, get_Img_Data.class);
+                               intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                               intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                               intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                               startActivity(intent);
+                               break;
+                           }
+                       }
+                   }
+
                }else if(sendBitmap==null) {
                    Toast.makeText(getApplicationContext(), "이미지를 선택 또는 촬영해 주세요.", Toast.LENGTH_SHORT).show();
                }
@@ -114,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         //카메라로 사진 촬영 시
         if(requestCode == REQUEST_TAKE_PHOTO){
             if(resultCode==RESULT_OK){
