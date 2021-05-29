@@ -14,32 +14,31 @@ public class get_Img_Data extends MainActivity{
 
     Button go_connect_market;
     ImageView learning_img;
-    static String[] pro_name = null;
+    String[] pro_name = ImgRequest.retrunStr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.get_imgdata);
 
-
-
-        learning_img = (ImageView)findViewById(R.id.GetData_Img);
-        Bitmap bitmap=ImgRequest.getBitmap();
-
-        while(true){
-            if(bitmap!=null){
-                break;
-            }
-            bitmap=ImgRequest.getBitmap();
-        }
-        learning_img.setImageBitmap(bitmap); //서버에서 받은 이미지를 화면에 출력
         pro_name = ImgRequest.retrunStr;
         while(true){
             if(pro_name!=null){
+                pro_name = ImgRequest.retrunStr;
                 break;
             }
-            pro_name = ImgRequest.retrunStr;
         }
+
+        learning_img = (ImageView)findViewById(R.id.GetData_Img);
+        Bitmap bitmap=ImgRequest.getBitmap();
+        while(true){
+            if(bitmap!=null){
+                bitmap=ImgRequest.getBitmap();
+                break;
+            }
+        }
+        learning_img.setImageBitmap(bitmap); //서버에서 받은 이미지를 화면에 출력
+
 
 
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, pro_name);

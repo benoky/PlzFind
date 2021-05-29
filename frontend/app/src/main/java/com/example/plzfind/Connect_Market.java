@@ -12,6 +12,18 @@ public class Connect_Market extends MainActivity {
     Button interpark_btn;
     Button auction_btn;
     Button wemakeprice_btn;
+
+    Button gmarket_btn;
+    Button tmon_btn;
+    Button coupang_btn;
+
+    Button naver_btn;
+    Button eleven_btn;
+    Button amazon_btn;
+
+    Button go_first;
+
+    String getproname = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,13 +32,30 @@ public class Connect_Market extends MainActivity {
         Intent intent = getIntent();
         String getproname = intent.getExtras().getString("pro_name");   // 제품명 받는 부분
         TextView pro_market = (TextView)findViewById(R.id.promarket);
-        pro_market.setText(getproname);
+        pro_market.setText("Market\n"+getproname);
 
+        ClickMarket(getproname);
+
+        go_first = (Button)findViewById(R.id.Go_first);
+        go_first.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Connect_Market.this, MainActivity.class);
+                //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
+    }
+
+    public void ClickMarket(String proname){
+
+        //1번째줄 버튼 #####################################################
         interpark_btn = (Button)findViewById(R.id.Interpark_Btn);
         interpark_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://m.shop.interpark.com/search_all/?q="+getproname+"&type=all"));
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://m.shop.interpark.com/search_all/?q="+proname+"&type=all"));
                 startActivity(i);
             }
         });
@@ -35,7 +64,7 @@ public class Connect_Market extends MainActivity {
         auction_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://browse.auction.co.kr/m/search?keyword="+getproname));
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://browse.auction.co.kr/m/search?keyword="+proname));
                 startActivity(i);
             }
         });
@@ -44,13 +73,65 @@ public class Connect_Market extends MainActivity {
         wemakeprice_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://msearch.wemakeprice.com/search?keyword="+getproname+"&_service=5"));
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://msearch.wemakeprice.com/search?keyword="+proname+"&_service=5"));
                 startActivity(i);
             }
         });
 
+        //2번째줄 버튼 #####################################################
+        gmarket_btn = (Button)findViewById(R.id.Gmarket_Btn);
+        gmarket_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://browse.gmarket.co.kr/m/search?keyword="+proname));
+                startActivity(i);
+            }
+        });
 
+        tmon_btn = (Button)findViewById(R.id.Tmon_Btn);
+        tmon_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://m.search.tmon.co.kr/search?useArtistchaiRegion=Y#_=1622271298553&keyword="+proname+"&sortType=POPULAR&thr=ms&useTypoCorrection=true"));
+                startActivity(i);
+            }
+        });
+
+        coupang_btn = (Button)findViewById(R.id.Coupang_Btn);
+        coupang_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://m.coupang.com/nm/search?q="+proname));
+                startActivity(i);
+            }
+        });
+
+        //3번째줄 버튼 #####################################################
+        naver_btn = (Button)findViewById(R.id.Naver_Btn);
+        naver_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://msearch.shopping.naver.com/search/all?query="+proname+"&frm=NVSHSRC&cat_id=&pb=true&mall="));
+                startActivity(i);
+            }
+        });
+
+        eleven_btn = (Button)findViewById(R.id.Eleven_Btn);
+        eleven_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://search.11st.co.kr/MW/search?searchKeyword="+proname+"&decSearchKeyword=G304#_filterKey=1622272864093"));
+                startActivity(i);
+            }
+        });
+
+        amazon_btn = (Button)findViewById(R.id.Amazon_Btn);
+        amazon_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.amazon.com/s?k="+proname+"&ref=nb_sb_noss"));
+                startActivity(i);
+            }
+        });
     }
-
-
 }
