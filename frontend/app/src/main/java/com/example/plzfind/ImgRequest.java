@@ -22,7 +22,8 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ImgRequest {
-    private static String serverIP = "http://3.36.22.132";
+    private static String serverIP = "http://180.228.125.70";
+    //private static String serverIP = "http://3.36.22.132";
     private static String imageUrl= serverIP+":5000/image"; //서버의 IP
     private static String nameUrl= serverIP+":5000/name"; //서버의 IP
 

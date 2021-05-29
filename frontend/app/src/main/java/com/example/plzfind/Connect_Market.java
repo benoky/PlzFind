@@ -41,6 +41,8 @@ public class Connect_Market extends MainActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Connect_Market.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                recreate();
                 startActivity(intent);
             }
         });

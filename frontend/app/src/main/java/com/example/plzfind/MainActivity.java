@@ -93,16 +93,16 @@ public class MainActivity extends AppCompatActivity {
                if(sendBitmap!=null){
                    Bitmap requestBitmap = sendBitmap;
                    ImgRequest.connectServer(requestBitmap); //비트맵 이미지를 전송하기위한 메소드 호출
-
-                   while(true){
-                       if(ImgRequest.retrunStr!=null) {
-                           Intent intent = new Intent(MainActivity.this, get_Img_Data.class);
-                           intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                           startActivity(intent);
-                           break;
-                       }
+                   try {
+                       Thread.sleep(3500);
+                   } catch (InterruptedException e) {
+                       e.printStackTrace();
                    }
-
+                   Intent intent = new Intent(MainActivity.this, get_Img_Data.class);
+                   intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                   intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                   intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                   startActivity(intent);
                }else if(sendBitmap==null) {
                    Toast.makeText(getApplicationContext(), "이미지를 선택 또는 촬영해 주세요.", Toast.LENGTH_SHORT).show();
                }
