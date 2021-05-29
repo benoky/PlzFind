@@ -22,8 +22,9 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ImgRequest {
-    private static String imageUrl="http://180.228.125.111:5000/image"; //서버의 IP
-    private static String nameUrl="http://180.228.125.111:5000/name"; //서버의 IP
+    private static String serverIP = "http://180.228.125.70";
+    private static String imageUrl= serverIP+":5000/image"; //서버의 IP
+    private static String nameUrl= serverIP+":5000/name"; //서버의 IP
 
     private static Bitmap returnImgBitmap=null; //서버로부터 반환 받은 이미지를 저장할 비트맵 객체
     public static String[] retrunStr=null; //서버에서 이미지에서 판별한 상품들의 문자열을 받아 저장하는 배열
