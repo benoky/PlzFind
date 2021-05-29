@@ -81,7 +81,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
-            android:background="@drawable/intericon" />
+            android:background="@drawable/gmarketicon" />
 
         <Button
             android:id="@+id/Tmon_Btn"
@@ -94,7 +94,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
-            android:background="@drawable/acticon" />
+            android:background="@drawable/tmonicon" />
 
         <Button
             android:id="@+id/Coupang_Btn"
@@ -107,7 +107,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
-            android:background="@drawable/wemapicon" />
+            android:background="@drawable/coupangicon" />
     </LinearLayout>
 
     <LinearLayout
@@ -127,7 +127,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
-            android:background="@drawable/intericon" />
+            android:background="@drawable/navericon" />
 
         <Button
             android:id="@+id/Eleven_Btn"
@@ -140,7 +140,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
-            android:background="@drawable/acticon" />
+            android:background="@drawable/elevenicon" />
 
         <Button
             android:id="@+id/Amazon_Btn"
@@ -153,7 +153,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
-            android:background="@drawable/wemapicon" />
+            android:background="@drawable/amazonicon" />
     </LinearLayout>
 
     <Button
