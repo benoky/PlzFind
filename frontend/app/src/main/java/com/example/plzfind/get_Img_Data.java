@@ -54,7 +54,6 @@ public class get_Img_Data extends MainActivity{
 
                 Intent i = new Intent(get_Img_Data.this, Connect_Market.class);
                 i.putExtra("pro_name", strText);
-
                 startActivity(i);
 
 

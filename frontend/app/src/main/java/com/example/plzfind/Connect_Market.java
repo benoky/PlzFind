@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class Connect_Market extends MainActivity {
 
@@ -18,6 +19,8 @@ public class Connect_Market extends MainActivity {
 
         Intent intent = getIntent();
         String getproname = intent.getExtras().getString("pro_name");   // 제품명 받는 부분
+        TextView pro_market = (TextView)findViewById(R.id.promarket);
+        pro_market.setText(getproname);
 
         interpark_btn = (Button)findViewById(R.id.Interpark_Btn);
         interpark_btn.setOnClickListener(new View.OnClickListener() {
