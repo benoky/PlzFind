@@ -26,7 +26,7 @@ public class ImgRequest {
     private static String nameUrl="http://180.228.125.111:5000/name"; //서버의 IP
 
     private static Bitmap returnImgBitmap=null; //서버로부터 반환 받은 이미지를 저장할 비트맵 객체
-    private static String[] retrunStr=null; //서버에서 이미지에서 판별한 상품들의 문자열을 받아 저장하는 배열
+    public static String[] retrunStr=null; //서버에서 이미지에서 판별한 상품들의 문자열을 받아 저장하는 배열
 
     protected static void connectServer(Bitmap bitmap){
         ByteArrayOutputStream stream = new ByteArrayOutputStream(); //압축된 bitmap의 byte배열을 담을 스트림
