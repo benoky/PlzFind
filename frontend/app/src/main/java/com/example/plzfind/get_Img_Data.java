@@ -3,12 +3,14 @@ package com.example.plzfind;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class get_Img_Data extends MainActivity{
 
@@ -31,18 +33,21 @@ public class get_Img_Data extends MainActivity{
         }
         learning_img.setImageBitmap(bitmap); //서버에서 받은 이미지를 화면에 출력
 
-        while(true){
-            if(bitmap!=null){
-                break;
-            }
-            bitmap=ImgRequest.getBitmap();
-        }
-        pro_name = ImgRequest.retrunStr;
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, pro_name);
-        ListView pro_list = (ListView)findViewById(R.id.ProList);
-        pro_list.setAdapter(adapter);
 
-        pro_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        pro_name = ImgRequest.retrunStr;    //제품명 받아옴
+        if(pro_name.equals("notFoundProduct"))
+        {
+            Log.d("태그","왜지");
+            Intent i = new Intent(get_Img_Data.this, MainActivity.class);
+            Toast.makeText(getApplicationContext(), "인식된 제품이 없습니다. 재촬영 해주세요", Toast.LENGTH_SHORT).show();
+            startActivity(i);
+        }else
+        {
+            Log.e("태그","아시발왜이러는데");
+            ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, pro_name);
+            ListView pro_list = (ListView)findViewById(R.id.ProList);
+            pro_list.setAdapter(adapter);
+            pro_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String strText = (String)parent.getItemAtPosition(position);
@@ -52,5 +57,7 @@ public class get_Img_Data extends MainActivity{
                 startActivity(i);
             }
         });
+    }//else end//
     }
+
 }
