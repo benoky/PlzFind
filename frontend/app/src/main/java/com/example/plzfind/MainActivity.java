@@ -1,6 +1,7 @@
 package com.example.plzfind;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -42,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
     final static int TAKE_PICTURE = 1;
     final static int REQUEST_TAKE_PHOTO = 1;
     static final int PICK_FROM_ALBUM = 2;
+
+    ProgressDialog custumProgressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +59,14 @@ public class MainActivity extends AppCompatActivity {
 
         sendBitmap = null;
         currentPhotoPath = null;
+
+        custumProgressDialog = new ProgressDialog(MainActivity.this);
+        custumProgressDialog.setMessage("Loading..");
+        custumProgressDialog.setTitle("Get Data");
+        custumProgressDialog.setIndeterminate(false);
+        custumProgressDialog.setCancelable(true);
+
+
 
         File sdcard = Environment.getExternalStorageDirectory();
         file = new File(sdcard,"capture.jpg");
@@ -78,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 dispatchTakePictureIntent();
             }
         });
+
         bt_gallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,36 +99,35 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, PICK_FROM_ALBUM);
             }
         });
-        //화면의 '전송'버튼 선택 시 동작
-        bt_send.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v) {
-                //bitmap에 이미지가 들어 있을 경우에만 전송관련 기능 호출출
-               if(sendBitmap!=null){
-                   Bitmap requestBitmap = sendBitmap;
-                   ImgRequest.connectServer(requestBitmap); //비트맵 이미지를 전송하기위한 메소드 호출
-                   /*try {
-                       Thread.sleep(3000);
-                   } catch (InterruptedException e) {
-                       e.printStackTrace();
-                   }*/
-                   while(true){
-                       if(sendBitmap == ImgRequest.tmBitmap){
-                           if(ImgRequest.retrunStr != null) {
-                               Intent intent = new Intent(MainActivity.this, get_Img_Data.class);
-                               intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                               startActivity(intent);
-                               break;
-                           }
-                           break;
-                       }
-                   }
 
-               }else if(sendBitmap==null) {
-                   Toast.makeText(getApplicationContext(), "이미지를 선택 또는 촬영해 주세요.", Toast.LENGTH_SHORT).show();
-               }
-            }
-        });
-    }//onCreate()
+        bt_send.setOnClickListener(new View.OnClickListener(){  //화면의 '전송'버튼 선택 시 동작
+            @Override
+            public void onClick(View v) {
+                if(sendBitmap!=null){                           //bitmap에 이미지가 들어 있을 경우에만 전송관련 기능 호출출
+                    Bitmap requestBitmap = sendBitmap;
+                    ImgRequest.connectServer(requestBitmap);    //비트맵 이미지를 전송하기위한 메소드 호출
+                    custumProgressDialog.show();
+                    while(true){
+                        if(sendBitmap == ImgRequest.tmBitmap){
+                            if(ImgRequest.retrunStr != null) {
+                                Intent intent = new Intent(MainActivity.this, get_Img_Data.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                custumProgressDialog.dismiss();
+                                startActivity(intent);
+                                break;
+                            }
+                            break;
+                        }
+                    }
+
+                }else if(sendBitmap==null) {
+                    Toast.makeText(getApplicationContext(), "이미지를 선택 또는 촬영해 주세요.", Toast.LENGTH_SHORT).show();
+                    custumProgressDialog.dismiss();
+                }
+                }
+            });
+        }//onCreate()
+
 
     //사진 촬영 또는 이미지 선택하여 이미지 비트맵 처리
     @Override
@@ -308,6 +320,8 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
     }
+
+
 
 }//MainActivity class
 
