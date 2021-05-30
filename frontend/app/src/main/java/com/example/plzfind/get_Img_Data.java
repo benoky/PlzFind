@@ -3,7 +3,6 @@ package com.example.plzfind;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -35,15 +34,13 @@ public class get_Img_Data extends MainActivity{
 
 
         pro_name = ImgRequest.retrunStr;    //제품명 받아옴
-        if(pro_name.equals("notFoundProduct"))
+        if(pro_name[0].equals("notFoundProduct"))
         {
-            Log.d("태그","왜지");
-            Intent i = new Intent(get_Img_Data.this, MainActivity.class);
             Toast.makeText(getApplicationContext(), "인식된 제품이 없습니다. 재촬영 해주세요", Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(get_Img_Data.this, MainActivity.class);
             startActivity(i);
         }else
         {
-            Log.e("태그","아시발왜이러는데");
             ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, pro_name);
             ListView pro_list = (ListView)findViewById(R.id.ProList);
             pro_list.setAdapter(adapter);
