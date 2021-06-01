@@ -1,7 +1,6 @@
 package com.example.plzfind;
 
 import android.Manifest;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -44,8 +43,6 @@ public class MainActivity extends AppCompatActivity {
     final static int REQUEST_TAKE_PHOTO = 1;
     static final int PICK_FROM_ALBUM = 2;
 
-    ProgressDialog custumProgressDialog;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,11 +57,6 @@ public class MainActivity extends AppCompatActivity {
         sendBitmap = null;
         currentPhotoPath = null;
 
-        custumProgressDialog = new ProgressDialog(MainActivity.this);
-        custumProgressDialog.setMessage("Loading..");
-        custumProgressDialog.setTitle("Get Data");
-        custumProgressDialog.setIndeterminate(false);
-        custumProgressDialog.setCancelable(true);
 
 
 
@@ -106,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
                 if(sendBitmap!=null){                           //bitmap에 이미지가 들어 있을 경우에만 전송관련 기능 호출출
                     Bitmap requestBitmap = sendBitmap;
                     ImgRequest.connectServer(requestBitmap);    //비트맵 이미지를 전송하기위한 메소드 호출
+<<<<<<< HEAD
                     //클라이언트와 서버가 정상적으로 연결되어있는지 확인하는 조건
                     if(ImgRequest.isServerConn()){
                         while(true){
@@ -117,6 +110,14 @@ public class MainActivity extends AppCompatActivity {
                                     startActivity(intent);
                                     break;
                                 }
+=======
+                    while(true){
+                        if(sendBitmap == ImgRequest.tmBitmap){
+                            if(ImgRequest.retrunStr != null) {
+                                Intent intent = new Intent(MainActivity.this, get_Img_Data.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+>>>>>>> 6fe4cb36e5141faa6639085523ed07a1c6d37005
                                 break;
                             }
                         }
@@ -127,7 +128,6 @@ public class MainActivity extends AppCompatActivity {
                     custumProgressDialog.show();
                 }else if(sendBitmap==null) {
                     Toast.makeText(getApplicationContext(), "이미지를 선택 또는 촬영해 주세요.", Toast.LENGTH_SHORT).show();
-                    custumProgressDialog.dismiss();
                 }
                 }
             });
