@@ -1,7 +1,6 @@
 package com.example.plzfind;
 
 import android.Manifest;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -44,8 +43,6 @@ public class MainActivity extends AppCompatActivity {
     final static int REQUEST_TAKE_PHOTO = 1;
     static final int PICK_FROM_ALBUM = 2;
 
-    ProgressDialog custumProgressDialog;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,11 +57,6 @@ public class MainActivity extends AppCompatActivity {
         sendBitmap = null;
         currentPhotoPath = null;
 
-        custumProgressDialog = new ProgressDialog(MainActivity.this);
-        custumProgressDialog.setMessage("Loading..");
-        custumProgressDialog.setTitle("Get Data");
-        custumProgressDialog.setIndeterminate(false);
-        custumProgressDialog.setCancelable(true);
 
 
 
@@ -106,13 +98,11 @@ public class MainActivity extends AppCompatActivity {
                 if(sendBitmap!=null){                           //bitmap에 이미지가 들어 있을 경우에만 전송관련 기능 호출출
                     Bitmap requestBitmap = sendBitmap;
                     ImgRequest.connectServer(requestBitmap);    //비트맵 이미지를 전송하기위한 메소드 호출
-                    custumProgressDialog.show();
                     while(true){
                         if(sendBitmap == ImgRequest.tmBitmap){
                             if(ImgRequest.retrunStr != null) {
                                 Intent intent = new Intent(MainActivity.this, get_Img_Data.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                custumProgressDialog.dismiss();
                                 startActivity(intent);
                                 break;
                             }
@@ -122,7 +112,6 @@ public class MainActivity extends AppCompatActivity {
 
                 }else if(sendBitmap==null) {
                     Toast.makeText(getApplicationContext(), "이미지를 선택 또는 촬영해 주세요.", Toast.LENGTH_SHORT).show();
-                    custumProgressDialog.dismiss();
                 }
                 }
             });
