@@ -12,6 +12,7 @@ jsonProductName={}
 
 #이미지 인식을 수행하는 메소드
 def imgRecognition(timestr,filename):
+    global jsonProductName
     net = cv2.dnn.readNet("yolo/yolov3_last.weights", "yolo/yolov3.cfg")
     classes = []
     with open("yolo/obj.names", "r") as f:
@@ -62,13 +63,16 @@ def imgRecognition(timestr,filename):
     #화면에 표시
     #글자 폰트
     font = cv2.FONT_HERSHEY_SIMPLEX
+    nameNum=0;
     for i in range(len(boxes)):
         if i in indexes:
             x, y, w, h = boxes[i]
             label = str(classes[class_ids[i]])
-            productNameindex='productName'+str(i-1)
+            print('test1=',i)
+            productNameindex='productName'+str(nameNum)
+            nameNum=nameNum+1
             
-            global jsonProductName
+            #global jsonProductName
             updateJson={productNameindex:label}
 
             jsonProductName.update(updateJson)
@@ -76,6 +80,19 @@ def imgRecognition(timestr,filename):
             color = colors[1]
             cv2.rectangle(img, (x, y), (x + w, y + h), color, 2)
             cv2.putText(img, label, (x, y + 15), font, 0.4, color, 1)
+    
+    if nameNum==0:
+        productNameindex='productName'+str(nameNum)
+        
+        
+        updateJson={productNameindex:"notFoundProduct"}
+
+        jsonProductName.update(updateJson)
+
+            
+            
+
+        
     #cv2.imshow("Image", img)
     #이미지 판별하여 박스 그린 후 저장하여 클라이언트에게 보내는 이미지로 사용
     cv2.imwrite("./sendImg/"+timestr+'_'+filename,img)
@@ -84,7 +101,8 @@ def imgRecognition(timestr,filename):
 
 @app.route('/image', methods = ['GET', 'POST'])
 def image_request():
-    print('asdasd')
+    global jsonProductName
+    jsonProductName={}
     files_ids = list(flask.request.files)
     print("\nNumber of Received Images : ", len(files_ids))
     image_num = 1

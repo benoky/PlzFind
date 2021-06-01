@@ -2,6 +2,7 @@ package com.example.plzfind;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+
 import android.util.Log;
 
 import org.jetbrains.annotations.NotNull;
@@ -22,8 +23,9 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ImgRequest {
-    //private static String serverIP = "http://180.228.125.70"; //aws
-    private static String serverIP = "http://3.36.22.132";      //local
+    //private static String serverIP = "http://180.228.125.70"; //local
+    private static String serverIP = "http://3.36.22.132";      //aws
+
     private static String imageUrl= serverIP+":5000/image"; //서버의 IP
     private static String nameUrl= serverIP+":5000/name"; //서버의 IP
 
@@ -31,16 +33,21 @@ public class ImgRequest {
     public static String[] retrunStr=null; //서버에서 이미지에서 판별한 상품들의 문자열을 받아 저장하는 배열
     public static Bitmap tmBitmap1 = null;
     public static Bitmap tmBitmap = null;
+
+    private static boolean isServerConn;
+
     protected static void connectServer(Bitmap bitmap){
+        isServerConn=false;
+
         tmBitmap1 = bitmap;
         ByteArrayOutputStream stream = new ByteArrayOutputStream(); //압축된 bitmap의 byte배열을 담을 스트림
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream); //이미지의 bitmap 압축
         byte[] byteArray=stream.toByteArray();
 
         RequestBody postBodyImage = new MultipartBody.Builder()
-               .setType(MultipartBody.FORM)
-               .addFormDataPart("image", "androidFlask.jpg", RequestBody.create(MediaType.parse("image/*jpg"), byteArray))
-               .build();
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("image", "androidFlask.jpg", RequestBody.create(MediaType.parse("image/*jpg"), byteArray))
+                .build();
         postRequest(imageUrl, postBodyImage);
     }//connectServer()
 
@@ -76,6 +83,11 @@ public class ImgRequest {
 
                         @Override
                         public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                            if(response.isSuccessful()){
+
+                            }else{
+
+                            }
                             try {
                                 JSONObject jsonObject=new JSONObject(response.body().string()); //서버로부터 이미지에서 판별한 상품 이름들을 json으로 받아옴
                                 retrunStr=new String[jsonObject.length()];
@@ -95,19 +107,26 @@ public class ImgRequest {
 
                         }
                     });
+                }else{
+
                 }
             }
 
             //이미지 전송 실패 시 동작
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.d("test_FailLog",e.getMessage());
+                isServerConn=false;
             }
         });
+
     }//postRequest()
 
     //서버로부터 받은 반환값(이미지)을 다시 반환해주는 메소드
     protected static Bitmap getBitmap(){
         return returnImgBitmap;
     }//getRequest()
+
+    protected static boolean isServerConn(){
+        return isServerConn;
+    }
 }//ImgRequest class
