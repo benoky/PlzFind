@@ -1,4 +1,5 @@
 import flask
+from flask.globals import request
 import werkzeug
 import time
 import json
@@ -20,9 +21,6 @@ def imgRecognition(timestr,filename):
     layer_names = net.getLayerNames()
     output_layers = [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
     colors = np.random.uniform(0, 255, size=(len(classes), 3))
-
-    #이미지 불러오기
-    #img = cv2.imread("C:/Programing/PlzFind/backend/findImages/20210523-150248_androidFlask.jpg")
 
     #클라이언트로부터 받아와 저장한 이미지를 읽어와 제품 판별
     img=cv2.imread("./getImages/"+timestr+'_'+filename);
@@ -68,11 +66,9 @@ def imgRecognition(timestr,filename):
         if i in indexes:
             x, y, w, h = boxes[i]
             label = str(classes[class_ids[i]])
-            print('test1=',i)
             productNameindex='productName'+str(nameNum)
             nameNum=nameNum+1
-            
-            #global jsonProductName
+
             updateJson={productNameindex:label}
 
             jsonProductName.update(updateJson)
@@ -84,48 +80,35 @@ def imgRecognition(timestr,filename):
     if nameNum==0:
         productNameindex='productName'+str(nameNum)
         
-        
         updateJson={productNameindex:"notFoundProduct"}
 
         jsonProductName.update(updateJson)
 
-            
-            
-
-        
-    #cv2.imshow("Image", img)
     #이미지 판별하여 박스 그린 후 저장하여 클라이언트에게 보내는 이미지로 사용
     cv2.imwrite("./sendImg/"+timestr+'_'+filename,img)
-    #cv2.waitKey(0)
-    #cv2.destroyAllWindows()
-
+    
+#클라이언트로부터 이미지 전송을 요청받고 반환하는 메소드
 @app.route('/image', methods = ['GET', 'POST'])
 def image_request():
     global jsonProductName
     jsonProductName={}
-    files_ids = list(flask.request.files)
-    print("\nNumber of Received Images : ", len(files_ids))
-    image_num = 1
-    for file_id in files_ids:
-        print("\nSaving Image ", str(image_num), "/", len(files_ids))
-        imagefile = flask.request.files[file_id]
+    timestr = time.strftime("%Y%m%d-%H%M%S")
+    print('\n========================'+timestr+'===========================')
+    imagefile = flask.request.files['image']
+
+    filename = werkzeug.utils.secure_filename(imagefile.filename)
         
-        filename = werkzeug.utils.secure_filename(imagefile.filename)
-        print("Image Filename : " + imagefile.filename)
-        timestr = time.strftime("%Y%m%d-%H%M%S")
-        imagefile.save("./getImages/"+timestr+'_'+filename) #타임스탬프와 함께 파일명 만들어서 저장
-        image_num = image_num + 1
-        imgRecognition(timestr,filename)
-    #post메소드의 응답으로 이미지를 반환해줌(현재 이미지는 임시 이미지 파일)
-    #return flask.send_file('C:/Programing/PlzFind/backend/testreturnImg.jpg',mimetype='image/jpg')
+    imagefile.save("./getImages/"+timestr+'_'+filename) #타임스탬프와 함께 파일명 만들어서 저장
+    imgRecognition(timestr,filename)
+    
     return flask.send_file("./sendImg/"+timestr+'_'+filename,mimetype='image/jpg')
 
+#클라이언트로부터 제품 이름 전송을 요청받고 반환하는 메소드
 @app.route('/name', methods = ['GET'])
 def name_request():
-    #jsonString={'productName0':'testG_pro','productName1':'testG_104','productName2':'testG_Hero'}
     global jsonProductName
-    print('test2 =',jsonProductName)
+    print('JSON File =',jsonProductName)
+
     return json.dumps(jsonProductName)
 
 app.run(host="0.0.0.0", port=5000, debug=True)
-
