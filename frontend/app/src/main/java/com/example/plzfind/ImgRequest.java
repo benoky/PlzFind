@@ -67,9 +67,11 @@ public class ImgRequest {
         //서버에post데이터 요청
         imgClient.newCall(request).enqueue(new Callback() {
             //이미지 전송 성공 시 서버로부터 return값 받아옴
+
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
                 if(response.isSuccessful()){
+                    isServerConn = true;
                     //서버로부터 받은 값을 bitmap으로 바꿈
                     returnImgBitmap=BitmapFactory.decodeStream(response.body().byteStream());
                     Log.d("test_반환값", String.valueOf(returnImgBitmap.getByteCount()));

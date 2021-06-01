@@ -105,15 +105,14 @@ public class MainActivity extends AppCompatActivity {
                                     startActivity(intent);
                                     break;
                                 }
-                                try {
-                                    Thread.sleep(300);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
                             } else {
                                 Toast.makeText(getApplicationContext(), "서버와 연결을 실패했습니다.", Toast.LENGTH_SHORT).show();
                             }
-
+                            try {
+                                Thread.sleep(300);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 } else if (sendBitmap == null) {
