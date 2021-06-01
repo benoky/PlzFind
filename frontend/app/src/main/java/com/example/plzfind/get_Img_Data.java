@@ -29,6 +29,11 @@ public class get_Img_Data extends MainActivity{
                 break;
             }
             bitmap=ImgRequest.getBitmap();
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         learning_img.setImageBitmap(bitmap); //서버에서 받은 이미지를 화면에 출력
 

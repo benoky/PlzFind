@@ -57,9 +57,6 @@ public class MainActivity extends AppCompatActivity {
         sendBitmap = null;
         currentPhotoPath = null;
 
-
-
-
         File sdcard = Environment.getExternalStorageDirectory();
         file = new File(sdcard,"capture.jpg");
 
@@ -98,18 +95,42 @@ public class MainActivity extends AppCompatActivity {
                 if(sendBitmap!=null){                           //bitmap에 이미지가 들어 있을 경우에만 전송관련 기능 호출출
                     Bitmap requestBitmap = sendBitmap;
                     ImgRequest.connectServer(requestBitmap);    //비트맵 이미지를 전송하기위한 메소드 호출
+<<<<<<< HEAD
+                    //클라이언트와 서버가 정상적으로 연결되어있는지 확인하는 조건
+                    if(ImgRequest.isServerConn()){
+                        while(true){
+                            if(sendBitmap == ImgRequest.tmBitmap){
+                                if(ImgRequest.retrunStr != null) {
+                                    Intent intent = new Intent(MainActivity.this, get_Img_Data.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    custumProgressDialog.dismiss();
+                                    startActivity(intent);
+                                    break;
+                                }
+=======
                     while(true){
                         if(sendBitmap == ImgRequest.tmBitmap){
                             if(ImgRequest.retrunStr != null) {
                                 Intent intent = new Intent(MainActivity.this, get_Img_Data.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(intent);
+>>>>>>> 6fe4cb36e5141faa6639085523ed07a1c6d37005
                                 break;
                             }
-                            break;
                         }
+<<<<<<< HEAD
+                        try {
+                            Thread.sleep(300);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+=======
+                    }else{
+                        Toast.makeText(getApplicationContext(), "서버와 연결을 실패했습니다.", Toast.LENGTH_SHORT).show();
+>>>>>>> 362bd7310d7f353b84b31f21a2c2732c74f6687f
                     }
 
+                    custumProgressDialog.show();
                 }else if(sendBitmap==null) {
                     Toast.makeText(getApplicationContext(), "이미지를 선택 또는 촬영해 주세요.", Toast.LENGTH_SHORT).show();
                 }
