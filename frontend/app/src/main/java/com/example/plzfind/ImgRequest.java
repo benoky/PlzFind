@@ -34,11 +34,9 @@ public class ImgRequest {
     public static Bitmap tmBitmap1 = null;
     public static Bitmap tmBitmap = null;
 
-    private static boolean isServerConn;
+    public static boolean isServerConn;
 
     protected static void connectServer(Bitmap bitmap){
-        isServerConn=false;
-
         tmBitmap1 = bitmap;
         ByteArrayOutputStream stream = new ByteArrayOutputStream(); //압축된 bitmap의 byte배열을 담을 스트림
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream); //이미지의 bitmap 압축
@@ -67,7 +65,6 @@ public class ImgRequest {
         //서버에post데이터 요청
         imgClient.newCall(request).enqueue(new Callback() {
             //이미지 전송 성공 시 서버로부터 return값 받아옴
-
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
                 if(response.isSuccessful()){
@@ -97,6 +94,7 @@ public class ImgRequest {
                                     retrunStr[i]=jsonObject.getString("productName"+i);
                                     Log.d("test_상품이름"+i,retrunStr[i]);
                                 }
+
                                 tmBitmap = tmBitmap1;
 
                             } catch (JSONException e) {
@@ -110,10 +108,9 @@ public class ImgRequest {
                         }
                     });
                 }else{
-
+                isServerConn=false;
                 }
             }
-
             //이미지 전송 실패 시 동작
             @Override
             public void onFailure(Call call, IOException e) {
