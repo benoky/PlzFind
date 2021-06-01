@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     Uri imgUri;
     File file;
 
-    Bitmap sendBitmap=null; //이미지 선택 및 촬영 후 이미지를 비트맵으로 저장하기 위한 객체
+    Bitmap sendBitmap = null; //이미지 선택 및 촬영 후 이미지를 비트맵으로 저장하기 위한 객체
     String currentPhotoPath;
 
     final static int TAKE_PICTURE = 1;
@@ -50,23 +50,22 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         imgV = findViewById(R.id.ImgView1);
-        Bt1 =findViewById(R.id.Bt_camara);
+        Bt1 = findViewById(R.id.Bt_camara);
         bt_gallery = findViewById(R.id.Bt_gallery);
-        bt_send=findViewById(R.id.bt_send);
+        bt_send = findViewById(R.id.bt_send);
 
         sendBitmap = null;
         currentPhotoPath = null;
 
         File sdcard = Environment.getExternalStorageDirectory();
-        file = new File(sdcard,"capture.jpg");
+        file = new File(sdcard, "capture.jpg");
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){ //권한설정 ( 마시멜로우 이상 Version)
-            if(checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { //권한설정 ( 마시멜로우 이상 Version)
+            if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
                     && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
                     && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-                    ){
-            }else
-            {
+            ) {
+            } else {
                 ActivityCompat.requestPermissions(this, new String[]{
                         Manifest.permission.CAMERA,
                         Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -89,54 +88,40 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        bt_send.setOnClickListener(new View.OnClickListener(){  //화면의 '전송'버튼 선택 시 동작
+        bt_send.setOnClickListener(new View.OnClickListener() {  //화면의 '전송'버튼 선택 시 동작
             @Override
             public void onClick(View v) {
-                if(sendBitmap!=null){                           //bitmap에 이미지가 들어 있을 경우에만 전송관련 기능 호출출
+                if (sendBitmap != null) {                           //bitmap에 이미지가 들어 있을 경우에만 전송관련 기능 호출출
                     Bitmap requestBitmap = sendBitmap;
                     ImgRequest.connectServer(requestBitmap);    //비트맵 이미지를 전송하기위한 메소드 호출
-<<<<<<< HEAD
+
                     //클라이언트와 서버가 정상적으로 연결되어있는지 확인하는 조건
-                    if(ImgRequest.isServerConn()){
-                        while(true){
-                            if(sendBitmap == ImgRequest.tmBitmap){
-                                if(ImgRequest.retrunStr != null) {
+                    if (ImgRequest.isServerConn()) {
+                        while (true) {
+                            if (sendBitmap == ImgRequest.tmBitmap) {
+                                if (ImgRequest.retrunStr != null) {
                                     Intent intent = new Intent(MainActivity.this, get_Img_Data.class);
                                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                    custumProgressDialog.dismiss();
                                     startActivity(intent);
                                     break;
                                 }
-=======
-                    while(true){
-                        if(sendBitmap == ImgRequest.tmBitmap){
-                            if(ImgRequest.retrunStr != null) {
-                                Intent intent = new Intent(MainActivity.this, get_Img_Data.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(intent);
->>>>>>> 6fe4cb36e5141faa6639085523ed07a1c6d37005
-                                break;
+                                try {
+                                    Thread.sleep(300);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                Toast.makeText(getApplicationContext(), "서버와 연결을 실패했습니다.", Toast.LENGTH_SHORT).show();
                             }
-                        }
-<<<<<<< HEAD
-                        try {
-                            Thread.sleep(300);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-=======
-                    }else{
-                        Toast.makeText(getApplicationContext(), "서버와 연결을 실패했습니다.", Toast.LENGTH_SHORT).show();
->>>>>>> 362bd7310d7f353b84b31f21a2c2732c74f6687f
-                    }
 
-                    custumProgressDialog.show();
-                }else if(sendBitmap==null) {
+                        }
+                    }
+                } else if (sendBitmap == null) {
                     Toast.makeText(getApplicationContext(), "이미지를 선택 또는 촬영해 주세요.", Toast.LENGTH_SHORT).show();
                 }
-                }
-            });
-        }//onCreate()
+            }
+        });
+    }//onCreate()
 
 
     //사진 촬영 또는 이미지 선택하여 이미지 비트맵 처리
@@ -145,63 +130,55 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         //카메라로 사진 촬영 시
-        if(requestCode == REQUEST_TAKE_PHOTO){
-            if(resultCode==RESULT_OK){
+        if (requestCode == REQUEST_TAKE_PHOTO) {
+            if (resultCode == RESULT_OK) {
                 File file = new File(currentPhotoPath);
                 ExifInterface exif = null;
-                try{
+                try {
                     exif = new ExifInterface(currentPhotoPath);
-                }catch (IOException e)
-                {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
                 int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
                         ExifInterface.ORIENTATION_UNDEFINED);
-                    if (Build.VERSION.SDK_INT >= 29)
-                    {
-                        ImageDecoder.Source source = ImageDecoder.createSource(getContentResolver(), Uri.fromFile(file));
-                        try
-                        {
-                            sendBitmap = ImageDecoder.decodeBitmap(source);
-                            if (sendBitmap != null)
-                            {
+                if (Build.VERSION.SDK_INT >= 29) {
+                    ImageDecoder.Source source = ImageDecoder.createSource(getContentResolver(), Uri.fromFile(file));
+                    try {
+                        sendBitmap = ImageDecoder.decodeBitmap(source);
+                        if (sendBitmap != null) {
 
-                                sendBitmap = rotateBitmap(sendBitmap,orientation);
-                                imgV.setImageBitmap(sendBitmap);
-                            }
+                            sendBitmap = rotateBitmap(sendBitmap, orientation);
+                            imgV.setImageBitmap(sendBitmap);
                         }
-                        catch (IOException e)
-                        {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        try {
-                            sendBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.fromFile(file));
-                            if (sendBitmap != null)
-                            {
-                                sendBitmap = rotateBitmap(sendBitmap,orientation);
-                                imgV.setImageBitmap(sendBitmap);
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
+                } else {
+                    try {
+                        sendBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.fromFile(file));
+                        if (sendBitmap != null) {
+                            sendBitmap = rotateBitmap(sendBitmap, orientation);
+                            imgV.setImageBitmap(sendBitmap);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
 
             }
         }
         //앨범 에서 선택 시
-        else if(requestCode == PICK_FROM_ALBUM){
-            if(resultCode==RESULT_OK){
+        else if (requestCode == PICK_FROM_ALBUM) {
+            if (resultCode == RESULT_OK) {
                 imgUri = data.getData();
-                String[] filePath = { MediaStore.Images.Media.DATA };
-                Cursor cursor = getContentResolver().query(imgUri,filePath,null,null,null );
+                String[] filePath = {MediaStore.Images.Media.DATA};
+                Cursor cursor = getContentResolver().query(imgUri, filePath, null, null, null);
                 cursor.moveToFirst();
                 String imagePath = cursor.getString(cursor.getColumnIndex(filePath[0]));
                 ExifInterface exif = null;
-                try{
+                try {
                     exif = new ExifInterface(imagePath);
-                }catch (IOException e)
-                {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
 
@@ -209,9 +186,9 @@ public class MainActivity extends AppCompatActivity {
                         ExifInterface.ORIENTATION_UNDEFINED);
                 try {
                     sendBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imgUri);
-                    sendBitmap = rotateBitmap(sendBitmap,orientation);
+                    sendBitmap = rotateBitmap(sendBitmap, orientation);
                     imgV.setImageBitmap(sendBitmap);
-                } catch(IOException e) {
+                } catch (IOException e) {
                 }
             }
         }
@@ -257,27 +234,21 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public Bitmap resizeBitmapImage(Bitmap source, int maxResolution)      
-    { //비트맵 리사이징 ** 긴 부분을 중심으로 비율을 맞춰 리사이징
+    public Bitmap resizeBitmapImage(Bitmap source, int maxResolution) { //비트맵 리사이징 ** 긴 부분을 중심으로 비율을 맞춰 리사이징
         int width = source.getWidth();
         int height = source.getHeight();
         int newWidth = width;
         int newHeight = height;
         float rate = 0.0f;
 
-        if(width > height)
-        {
-            if(maxResolution < width)
-            {
+        if (width > height) {
+            if (maxResolution < width) {
                 rate = maxResolution / (float) width;
                 newHeight = (int) (height * rate);
                 newWidth = maxResolution;
             }
-        }
-        else
-        {
-            if(maxResolution < height)
-            {
+        } else {
+            if (maxResolution < height) {
                 rate = maxResolution / (float) height;
                 newWidth = (int) (width * rate);
                 newHeight = maxResolution;
@@ -324,13 +295,11 @@ public class MainActivity extends AppCompatActivity {
             Bitmap bmRotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
             bitmap.recycle();
             return bmRotated;
-        }
-        catch (OutOfMemoryError e) {
+        } catch (OutOfMemoryError e) {
             e.printStackTrace();
             return null;
         }
     }
-
 
 
 }//MainActivity class
