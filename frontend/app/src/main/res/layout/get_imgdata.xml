@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#333333"
     android:orientation="vertical"
     tools:context=".get_Img_Data">
 
@@ -25,6 +26,7 @@
             android:layout_width="338dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
+
 
     </LinearLayout>
 
