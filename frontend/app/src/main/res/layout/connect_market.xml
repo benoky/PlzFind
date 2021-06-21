@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="#333333"
     android:orientation="vertical"
     tools:context=".Connect_Market">
 
@@ -13,9 +13,9 @@
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_weight="1"
-        android:background="#FFFFFF"
+        android:background="#333333"
         android:gravity="right"
-        android:textColor="#9C27B0"
+        android:textColor="#70B8D8"
         android:textSize="45dp" />
 
     <LinearLayout
