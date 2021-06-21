@@ -42,7 +42,7 @@ def imgRecognition(timestr,filename):
             scores = detection[5:]
             class_id = np.argmax(scores)
             confidence = scores[class_id]
-            if confidence > 0.5:
+            if confidence > 0.35:
                 #Object Detection
                 center_x = int(detection[0] * width)
                 center_y = int(detection[1] * height)
@@ -66,6 +66,8 @@ def imgRecognition(timestr,filename):
         if i in indexes:
             x, y, w, h = boxes[i]
             label = str(classes[class_ids[i]])
+            #인식된 제품의 이름과 인식률을 콘솔창에 출력
+            print('Recognized product : '+label+", Recognition Rate : "+str(confidences[i]))
             productNameindex='productName'+str(nameNum)
             nameNum=nameNum+1
 
@@ -76,7 +78,8 @@ def imgRecognition(timestr,filename):
             color = colors[1]
             cv2.rectangle(img, (x, y), (x + w, y + h), color, 2)
             cv2.putText(img, label, (x, y + 15), font, 0.4, color, 1)
-    
+
+    #인식된 제품이 없을 경우 'productName':'notFoundProduct'로 json생성
     if nameNum==0:
         productNameindex='productName'+str(nameNum)
         
